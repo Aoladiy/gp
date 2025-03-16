@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\LocalMyAccountController;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -15,7 +16,10 @@ Route::group([
         (array) config('backpack.base.middleware_key', 'admin')
     ),
     'namespace' => 'App\Http\Controllers\Admin',
-], function () { // custom admin routes
+], function () {
+    Route::get('edit-account-info', [LocalMyAccountController::class, 'getAccountInfoForm'])->name('backpack.account.info');
+    Route::post('edit-account-info', [LocalMyAccountController::class, 'postAccountInfoForm'])->name('backpack.account.info.store');
+    Route::post('change-password', [LocalMyAccountController::class, 'postChangePasswordForm'])->name('backpack.account.password');
 }); // this should be the absolute last line of this file
 
 /**
