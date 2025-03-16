@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "150d140c7ca8d8439eb6c6ed678cd428",
+    "content-hash": "2b3fb985b673e0845a065059f6840b62",
     "packages": [
         {
             "name": "backpack/basset",
@@ -173,6 +173,74 @@
                 "source": "https://github.com/Laravel-Backpack/CRUD/tree/6.8.0"
             },
             "time": "2025-02-24T16:21:55+00:00"
+        },
+        {
+            "name": "backpack/settings",
+            "version": "3.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Laravel-Backpack/Settings.git",
+                "reference": "7c8ac0f7868da3e5e62a87dfd343052aaf51348d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Laravel-Backpack/Settings/zipball/7c8ac0f7868da3e5e62a87dfd343052aaf51348d",
+                "reference": "7c8ac0f7868da3e5e62a87dfd343052aaf51348d",
+                "shasum": ""
+            },
+            "require": {
+                "backpack/crud": "^4.0|^5.0|^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.0|^10.0|^9.0|^7.0",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Backpack\\Settings\\SettingsServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Backpack\\Settings\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Cristian Tabacitu",
+                    "email": "tabacitu@backpackforlaravel.com",
+                    "homepage": "https://backpackforlaravel.com",
+                    "role": "Chief Architect & Lead Developer"
+                }
+            ],
+            "description": "Application settings interface for Laravel 5 using Backpack CRUD.",
+            "homepage": "https://github.com/laravel-backpack/settings",
+            "keywords": [
+                "backpack",
+                "backpack settings",
+                "dick",
+                "dick settings",
+                "laravel backpack",
+                "manage settings",
+                "settings admin",
+                "tabacitu",
+                "updivision"
+            ],
+            "support": {
+                "issues": "https://github.com/Laravel-Backpack/Settings/issues",
+                "source": "https://github.com/Laravel-Backpack/Settings/tree/3.1.2"
+            },
+            "time": "2025-02-20T10:50:49+00:00"
         },
         {
             "name": "backpack/theme-tabler",
