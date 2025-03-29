@@ -23,16 +23,21 @@ Route::group([
     Route::crud('part-template', 'PartTemplateCrudController');
     Route::crud('part-template/{parent_id}/part-template', 'PartTemplateCrudController');
     Route::crud('part', 'PartCrudController');
+    Route::crud('part/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
     Route::crud('part-item', 'PartItemCrudController');
+    Route::crud('part-item/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
     Route::crud('part-batch', 'PartBatchCrudController');
     Route::crud('equipment', 'EquipmentCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('storage-location', 'StorageLocationCrudController');
+    Route::crud('storage-location/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
     Route::crud('storage-zone', 'StorageZoneCrudController');
     Route::crud('storage-movement', 'StorageMovementCrudController');
     Route::crud('stock-movement', 'StockMovementCrudController');
     Route::crud('write-off-reason', 'WriteOffReasonCrudController');
     Route::crud('part-item-return', 'PartItemReturnCrudController');
+    Route::crud('rotation-method', 'RotationMethodCrudController');
+    Route::crud('lighting-level', 'LightingLevelCrudController');
 }); // this should be the absolute last line of this file
 
 /**

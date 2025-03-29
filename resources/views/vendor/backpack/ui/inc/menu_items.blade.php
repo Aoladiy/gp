@@ -23,15 +23,21 @@
     <x-backpack::menu-dropdown-item title="Экземпляры запчастей" icon="la la-question"
                                     :link="backpack_url('part-item')"/>
     <x-backpack::menu-dropdown-item title="Партии запчастей" icon="la la-question" :link="backpack_url('part-batch')"/>
+    <x-backpack::menu-dropdown-item title="Методы ротации" icon="la la-question"
+                                    :link="backpack_url('rotation-method')"/>
+    <x-backpack::menu-dropdown-item title="Уровни освещения" icon="la la-question"
+                                    :link="backpack_url('lighting-level')"/>
 </x-backpack::menu-dropdown>
 <x-backpack::menu-item title="Техника" icon="la la-question" :link="backpack_url('equipment')"/>
 <x-backpack::menu-item title="Теги" icon="la la-question" :link="backpack_url('tag')"/>
 <x-backpack::menu-dropdown title="Склад" icon="la la-puzzle-piece">
-    <x-backpack::menu-dropdown-item title="Складские локации" icon="la la-question" :link="backpack_url('storage-location')"/>
+    <x-backpack::menu-dropdown-item title="Складские локации" icon="la la-question"
+                                    :link="backpack_url('storage-location')"/>
     <x-backpack::menu-dropdown-item title="Складские зоны" icon="la la-question" :link="backpack_url('storage-zone')"/>
-    <x-backpack::menu-dropdown-item title="Складские перемещения" icon="la la-question"
-                           :link="backpack_url('storage-movement')"/>
-    <x-backpack::menu-dropdown-item title="Складские движения" icon="la la-question" :link="backpack_url('stock-movement')"/>
+    <x-backpack::menu-dropdown-item title="Внутрискладские движения" icon="la la-question"
+                                    :link="backpack_url('storage-movement')"/>
+    <x-backpack::menu-dropdown-item title="Складские движения" icon="la la-question"
+                                    :link="backpack_url('stock-movement')"/>
 </x-backpack::menu-dropdown>
 <x-backpack::menu-item title="Причины списания" icon="la la-question" :link="backpack_url('write-off-reason')"/>
 <x-backpack::menu-item title="Возврат экземпляров запчастей" icon="la la-question"
