@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PartTemplateRequest;
+use App\Models\PartTemplate;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Route;
+use function PHPUnit\Framework\isNull;
 
 /**
  * Class PartTemplateCrudController
@@ -39,6 +41,22 @@ class PartTemplateCrudController extends CrudController
             $this->crud->addClause('where', 'parent_id', null);
         }
         CRUD::setEntityNameStrings('part template', 'part templates');
+        /** @var PartTemplate $currentEntry */
+        if ($currentEntryId = $this->crud->getCurrentEntryId()) {
+            $currentEntry = $this->crud->getModel()::query()->find($currentEntryId);
+            $parents = collect();
+            /** @var PartTemplate|null $parent */
+            $parent = $currentEntry->parent;
+            while ($parent) {
+                $parents->prepend([$parent->name => backpack_url('/part-template/' . $parent->id . '/part-template')]);
+                $parent = $parent->parent;
+            }
+            $parents->prepend(['Part templates' => backpack_url('part-template')]);
+            $parents->prepend([trans('backpack::crud.admin') => backpack_url('dashboard')]);
+            $parents->add([trans('backpack::crud.list') => false]);
+            $parents = $parents->mapWithKeys(fn($breadcrumb, $key) => $breadcrumb);
+            $this->data['breadcrumbs'] = $parents->toArray();
+        }
     }
 
     /**
