@@ -5,14 +5,9 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
- *
- */
-class PartTemplate extends Model
+class LightingLevel extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -23,15 +18,9 @@ class PartTemplate extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @var string
-     */
-    protected $table = 'part_templates';
+    protected $table = 'lighting_levels';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    /**
-     * @var string[]
-     */
     protected $guarded = ['id'];
     // protected $fillable = [];
     // protected $hidden = [];
@@ -42,22 +31,6 @@ class PartTemplate extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return bool
-     */
-    public function hasParent(): bool
-    {
-        return $this->parent()->exists();
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasNested(): bool
-    {
-        return $this->nested()->exists();
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -65,27 +38,11 @@ class PartTemplate extends Model
     */
 
     /**
-     * @return BelongsTo
-     */
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo($this::class);
-    }
-
-    /**
      * @return HasMany
      */
-    public function nested(): HasMany
+    public function storageRequirement(): HasMany
     {
-        return $this->hasMany($this::class, 'parent_id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function parts(): HasMany
-    {
-        return $this->hasMany(Part::class, 'template_id');
+        return $this->hasMany(StorageRequirement::class);
     }
 
     /*

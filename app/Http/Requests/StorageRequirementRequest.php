@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class PartRequest extends FormRequest
+class StorageRequirementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +25,7 @@ class PartRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'article_number' => [
-                'required',
-                'string',
-                Rule::unique('parts', 'article_number')->ignore($this->id),
-            ],
+            // 'name' => 'required|min:5|max:255'
         ];
     }
 
