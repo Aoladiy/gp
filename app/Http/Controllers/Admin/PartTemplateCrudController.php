@@ -27,7 +27,7 @@ class PartTemplateCrudController extends CrudController
      *
      * @return void
      */
-    public function setup()
+    public function setup(): void
     {
         CRUD::setModel(\App\Models\PartTemplate::class);
         $this->crud->allowAccess('nested_part_templates');

@@ -21,7 +21,7 @@ class RotationMethodCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,13 +33,14 @@ class RotationMethodCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->addColumn('id');
+        $this->crud->addColumn('name');
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -49,14 +50,25 @@ class RotationMethodCrudController extends CrudController
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(RotationMethodRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+
+        $this->crud->addField([
+            'name' => 'name',
+            'label' => 'Название',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'description',
+            'label' => 'Описание',
+            'type' => 'textarea',
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax:
@@ -66,7 +78,7 @@ class RotationMethodCrudController extends CrudController
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
