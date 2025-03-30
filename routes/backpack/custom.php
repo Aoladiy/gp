@@ -31,7 +31,6 @@ Route::group([
     Route::crud('tag', 'TagCrudController');
     Route::crud('storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
-    Route::crud('storage-zone', 'StorageZoneCrudController');
     Route::crud('storage-movement', 'StorageMovementCrudController');
     Route::crud('stock-movement', 'StockMovementCrudController');
     Route::crud('write-off-reason', 'WriteOffReasonCrudController');
