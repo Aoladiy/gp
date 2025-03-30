@@ -30,6 +30,7 @@ Route::group([
     Route::crud('equipment', 'EquipmentCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('storage-location', 'StorageLocationCrudController');
+    Route::crud('storage-location/{parent_id}/storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
     Route::crud('storage-movement', 'StorageMovementCrudController');
     Route::crud('stock-movement', 'StockMovementCrudController');
@@ -37,6 +38,8 @@ Route::group([
     Route::crud('part-item-return', 'PartItemReturnCrudController');
     Route::crud('rotation-method', 'RotationMethodCrudController');
     Route::crud('lighting-level', 'LightingLevelCrudController');
+    Route::crud('part-item-status', 'PartItemStatusCrudController');
+    Route::crud('storage-location-type', 'StorageLocationTypeCrudController');
 }); // this should be the absolute last line of this file
 
 /**

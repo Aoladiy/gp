@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\PartBatchRequest;
-use App\Models\Part;
+use App\Http\Requests\PartItemStatusRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class PartBatchCrudController
+ * Class PartItemStatusCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class PartBatchCrudController extends CrudController
+class PartItemStatusCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -27,9 +26,9 @@ class PartBatchCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\PartBatch::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/part-batch');
-        CRUD::setEntityNameStrings('part batch', 'part batches');
+        CRUD::setModel(\App\Models\PartItemStatus::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/part-item-status');
+        CRUD::setEntityNameStrings('part item status', 'part item statuses');
     }
 
     /**
@@ -41,17 +40,7 @@ class PartBatchCrudController extends CrudController
     protected function setupListOperation(): void
     {
         $this->crud->addColumn('id');
-        $this->crud->addColumn([
-            'name' => 'part_id',
-            'label' => 'Деталь',
-            'type' => 'select',
-            'entity' => 'part',
-            'attribute' => 'name',
-            'model' => Part::class,
-        ]);
-        $this->crud->addColumn('batch_number');
-        $this->crud->addColumn('received_at');
-        $this->crud->addColumn('expiry_date');
+        $this->crud->addColumn('name');
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -67,33 +56,18 @@ class PartBatchCrudController extends CrudController
      */
     protected function setupCreateOperation(): void
     {
-        CRUD::setValidation(PartBatchRequest::class);
+        CRUD::setValidation(PartItemStatusRequest::class);
 
         $this->crud->addField([
-            'name' => 'part_id',
-            'label' => 'Запчасть',
-            'type' => 'select_from_array',
-            'options' => Part::query()->pluck('name', 'id'),
-            'allows_null' => false,
-            'allows_multiple' => false,
-        ]);
-
-        $this->crud->addField([
-            'name' => 'batch_number',
-            'label' => 'Номер партии',
+            'name' => 'name',
+            'label' => 'Название',
             'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name' => 'received_at',
-            'label' => 'Когда получено',
-            'type' => 'datetime',
-        ]);
-
-        $this->crud->addField([
-            'name' => 'expiry_date',
-            'label' => 'Годен до',
-            'type' => 'datetime',
+            'name' => 'description',
+            'label' => 'Описание',
+            'type' => 'textarea',
         ]);
 
         /**

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rotation_methods', function (Blueprint $table) {
+        Schema::create('part_batches', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('part_id');
+            $table->string('batch_number');
+            $table->dateTime('received_at');
+            $table->dateTime('expiry_date')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rotation_methods');
+        Schema::dropIfExists('part_batches');
     }
 };

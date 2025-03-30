@@ -6,6 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
@@ -77,6 +78,22 @@ class Part extends Model
     public function storageRequirements(): MorphOne
     {
         return $this->morphOne(StorageRequirement::class, 'storage_requirements', 'requireable_type', 'requireable_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function partBatches(): HasMany
+    {
+        return $this->hasMany(PartBatch::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function partItems(): HasMany
+    {
+        return $this->hasMany(PartItem::class);
     }
 
     /*

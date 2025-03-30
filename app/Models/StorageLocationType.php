@@ -5,13 +5,12 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
  */
-class StorageLocation extends Model
+class StorageLocationType extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -25,7 +24,7 @@ class StorageLocation extends Model
     /**
      * @var string
      */
-    protected $table = 'storage_locations';
+    protected $table = 'storage_location_types';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     /**
@@ -41,22 +40,6 @@ class StorageLocation extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return bool
-     */
-    public function hasStorageLocationType(): bool
-    {
-        return $this->storageLocationType()->exists();
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasParent(): bool
-    {
-        return $this->parent()->exists();
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -64,27 +47,11 @@ class StorageLocation extends Model
     */
 
     /**
-     * @return BelongsTo
-     */
-    public function storageLocationType(): BelongsTo
-    {
-        return $this->belongsTo(StorageLocationType::class, 'location_type_id');
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo($this::class);
-    }
-
-    /**
      * @return HasMany
      */
-    public function partItems(): HasMany
+    public function storageLocations(): HasMany
     {
-        return $this->hasMany(PartItem::class);
+        return $this->hasMany(StorageLocation::class, 'location_type_id');
     }
 
     /*
