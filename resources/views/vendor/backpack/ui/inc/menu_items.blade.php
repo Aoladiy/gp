@@ -33,7 +33,6 @@
 <x-backpack::menu-dropdown title="Склад" icon="la la-puzzle-piece">
     <x-backpack::menu-dropdown-item title="Складские локации" icon="la la-question"
                                     :link="backpack_url('storage-location')"/>
-    <x-backpack::menu-dropdown-item title="Складские зоны" icon="la la-question" :link="backpack_url('storage-zone')"/>
     <x-backpack::menu-dropdown-item title="Внутрискладские движения" icon="la la-question"
                                     :link="backpack_url('storage-movement')"/>
     <x-backpack::menu-dropdown-item title="Складские движения" icon="la la-question"
