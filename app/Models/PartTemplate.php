@@ -6,6 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -85,6 +86,11 @@ class PartTemplate extends Model
     public function parts(): HasMany
     {
         return $this->hasMany(Part::class, 'template_id');
+    }
+
+    public function requiredByEquipment(): BelongsToMany
+    {
+        return $this->belongsToMany(Equipment::class, 'equipment_required_templates', 'part_template_id', 'equipment_id');
     }
 
     /*

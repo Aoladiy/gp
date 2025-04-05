@@ -6,6 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
@@ -94,6 +95,11 @@ class Part extends Model
     public function partItems(): HasMany
     {
         return $this->hasMany(PartItem::class);
+    }
+
+    public function compatibleEquipment(): BelongsToMany
+    {
+        return $this->belongsToMany(Equipment::class, 'equipment_part_compatability', 'part_id', 'equipment_id');
     }
 
     /*
