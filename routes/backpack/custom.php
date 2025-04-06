@@ -32,7 +32,6 @@ Route::group([
     Route::crud('storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{parent_id}/storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
-    Route::crud('storage-movement', 'StorageMovementCrudController');
     Route::crud('stock-movement', 'StockMovementCrudController');
     Route::crud('write-off-reason', 'WriteOffReasonCrudController');
     Route::crud('part-item-return', 'PartItemReturnCrudController');
