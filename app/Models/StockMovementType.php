@@ -5,8 +5,9 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PartItemReturn extends Model
+class StockMovementType extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,7 +18,7 @@ class PartItemReturn extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'part_item_returns';
+    protected $table = 'stock_movement_types';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -35,6 +36,14 @@ class PartItemReturn extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * @return HasMany
+     */
+    public function stockMovement(): HasMany
+    {
+        return $this->hasMany(StockMovement::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

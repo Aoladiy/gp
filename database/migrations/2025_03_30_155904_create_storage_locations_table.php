@@ -15,18 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('location_type_id');
             $table->timestamps();
 
             $table->foreign('parent_id')
                 ->references('id')
                 ->on('storage_locations')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-
-            $table->foreign('location_type_id')
-                ->references('id')
-                ->on('storage_location_types')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

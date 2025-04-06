@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class PartItemReturnRequest extends FormRequest
+class StockMovementTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +26,11 @@ class PartItemReturnRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('stock_movement_types', 'name')->ignore($this->id),
+            ],
         ];
     }
 

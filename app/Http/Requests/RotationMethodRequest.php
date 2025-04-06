@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RotationMethodRequest extends FormRequest
 {
@@ -25,7 +26,11 @@ class RotationMethodRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('rotation_methods', 'name')->ignore($this->id),
+            ],
         ];
     }
 
