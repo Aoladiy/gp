@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  *
@@ -58,6 +59,14 @@ class PartTemplate extends Model
         return $this->nested()->exists();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasTags(): bool
+    {
+        return $this->tags()->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -88,9 +97,20 @@ class PartTemplate extends Model
         return $this->hasMany(Part::class, 'template_id');
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function requiredByEquipment(): BelongsToMany
     {
         return $this->belongsToMany(Equipment::class, 'equipment_required_templates', 'part_template_id', 'equipment_id');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /*

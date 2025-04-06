@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  *
@@ -49,6 +50,14 @@ class StorageLocation extends Model
         return $this->parent()->exists();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasTags(): bool
+    {
+        return $this->tags()->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -85,6 +94,14 @@ class StorageLocation extends Model
     public function toForStockMovements(): HasMany
     {
         return $this->hasMany(StockMovement::class, 'to_location_id');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /*

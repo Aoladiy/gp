@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  *
@@ -51,6 +52,14 @@ class Part extends Model
         return $this->storageRequirements()->exists();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasTags(): bool
+    {
+        return $this->tags()->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -82,6 +91,14 @@ class Part extends Model
     }
 
     /**
+     * @return MorphToMany
+     */
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
      * @return HasMany
      */
     public function partBatches(): HasMany
@@ -97,6 +114,9 @@ class Part extends Model
         return $this->hasMany(PartItem::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function compatibleEquipment(): BelongsToMany
     {
         return $this->belongsToMany(Equipment::class, 'equipment_part_compatability', 'part_id', 'equipment_id');
