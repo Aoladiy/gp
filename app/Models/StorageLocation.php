@@ -44,14 +44,6 @@ class StorageLocation extends Model
     /**
      * @return bool
      */
-    public function hasStorageLocationType(): bool
-    {
-        return $this->storageLocationType()->exists();
-    }
-
-    /**
-     * @return bool
-     */
     public function hasParent(): bool
     {
         return $this->parent()->exists();
@@ -62,14 +54,6 @@ class StorageLocation extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    /**
-     * @return BelongsTo
-     */
-    public function storageLocationType(): BelongsTo
-    {
-        return $this->belongsTo(StorageLocationType::class, 'location_type_id');
-    }
 
     /**
      * @return BelongsTo
@@ -85,6 +69,22 @@ class StorageLocation extends Model
     public function partItems(): HasMany
     {
         return $this->hasMany(PartItem::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function fromForStockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class, 'from_location_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function toForStockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class, 'to_location_id');
     }
 
     /*

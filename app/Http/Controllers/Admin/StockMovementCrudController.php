@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StockMovementRequest;
+use App\Models\PartItem;
+use App\Models\StockMovementType;
+use App\Models\StorageLocation;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Carbon;
 
 /**
  * Class StockMovementCrudController
@@ -21,10 +26,10 @@ class StockMovementCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
-    public function setup()
+    public function setup(): void
     {
         CRUD::setModel(\App\Models\StockMovement::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/stock-movement');
@@ -33,13 +38,56 @@ class StockMovementCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
-    protected function setupListOperation()
+    protected function setupListOperation(): void
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->addColumn([
+            'name' => 'part_item_id',
+            'label' => 'Запчасти',
+            'type' => 'select',
+            'entity' => 'partItem',
+            'attribute' => 'serial_number',
+            'model' => PartItem::class,
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'stock_movement_type_id',
+            'label' => 'Тип движения',
+            'type' => 'select',
+            'entity' => 'stockMovementType',
+            'attribute' => 'name',
+            'model' => StockMovementType::class,
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'from_location_id',
+            'label' => 'Из локации',
+            'type' => 'select',
+            'entity' => 'fromLocation',
+            'attribute' => 'name',
+            'model' => StorageLocation::class,
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'to_location_id',
+            'label' => 'В локацию',
+            'type' => 'select',
+            'entity' => 'toLocation',
+            'attribute' => 'name',
+            'model' => StorageLocation::class,
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'user_id',
+            'label' => 'Ответственный',
+            'type' => 'select',
+            'entity' => 'user',
+            'attribute' => 'name',
+            'model' => User::class,
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -49,14 +97,72 @@ class StockMovementCrudController extends CrudController
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
-    protected function setupCreateOperation()
+    protected function setupCreateOperation(): void
     {
         CRUD::setValidation(StockMovementRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+
+        $this->crud->addField([
+            'name' => 'user_id',
+            'type' => 'hidden',
+            'value' => backpack_auth()->user()->id,
+        ]);
+
+        $this->crud->addField([
+            'name' => 'part_item_id',
+            'label' => 'Запчасти',
+            'type' => 'select_from_array',
+            'options' => PartItem::query()->pluck('serial_number', 'id'),
+            'allows_null' => true,
+            'default' => null,
+            'allows_multiple' => false,
+        ]);
+
+        $this->crud->addField([
+            'name' => 'stock_movement_type_id',
+            'label' => 'Тип движения',
+            'type' => 'select_from_array',
+            'options' => StockMovementType::query()->pluck('name', 'id'),
+            'allows_null' => true,
+            'default' => null,
+            'allows_multiple' => false,
+        ]);
+
+        $this->crud->addField([
+            'name' => 'from_location_id',
+            'label' => 'Из локации',
+            'type' => 'select_from_array',
+            'options' => StorageLocation::query()->pluck('name', 'id'),
+            'allows_null' => true,
+            'default' => null,
+            'allows_multiple' => false,
+        ]);
+
+        $this->crud->addField([
+            'name' => 'to_location_id',
+            'label' => 'Из локации',
+            'type' => 'select_from_array',
+            'options' => StorageLocation::query()->pluck('name', 'id'),
+            'allows_null' => true,
+            'default' => null,
+            'allows_multiple' => false,
+        ]);
+
+        $this->crud->addField([
+            'name' => 'moved_at',
+            'label' => 'Дата и время',
+            'type' => 'datetime',
+            'default' => Carbon::now(),
+        ]);
+
+        $this->crud->addField([
+            'name' => 'note',
+            'label' => 'Примечания',
+            'type' => 'textarea',
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax:
@@ -66,11 +172,11 @@ class StockMovementCrudController extends CrudController
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected function setupUpdateOperation()
+    protected function setupUpdateOperation(): void
     {
         $this->setupCreateOperation();
     }

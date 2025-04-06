@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LightingLevelRequest extends FormRequest
 {
@@ -25,7 +26,11 @@ class LightingLevelRequest extends FormRequest
     public function rules()
     {
         return [
-             'name' => 'required'
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('lighting_levels', 'name')->ignore($this->id),
+            ],
         ];
     }
 

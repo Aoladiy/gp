@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StorageLocationRequest;
 use App\Models\StorageLocation;
-use App\Models\StorageLocationType;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Route;
@@ -74,14 +73,6 @@ class StorageLocationCrudController extends CrudController
 
         $this->crud->addColumn('id');
         $this->crud->addColumn('name');
-        $this->crud->addColumn([
-            'name' => 'location_type_id',
-            'label' => 'Тип локации',
-            'type' => 'select',
-            'entity' => 'storageLocationType',
-            'attribute' => 'name',
-            'model' => StorageLocationType::class,
-        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -109,16 +100,6 @@ class StorageLocationCrudController extends CrudController
             'name' => 'name',
             'label' => 'Название',
             'type' => 'text',
-        ]);
-
-        $this->crud->addField([
-            'name' => 'location_type_id',
-            'label' => 'Тип локации',
-            'type' => 'select_from_array',
-            'options' => StorageLocationType::query()->pluck('name', 'id'),
-            'allows_null' => true,
-            'default' => null,
-            'allows_multiple' => false,
         ]);
 
         /**

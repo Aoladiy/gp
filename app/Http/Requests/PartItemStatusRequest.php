@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PartItemStatusRequest extends FormRequest
 {
@@ -25,7 +26,11 @@ class PartItemStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('part_item_statuses', 'name')->ignore($this->id),
+            ],
         ];
     }
 
