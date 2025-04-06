@@ -28,7 +28,6 @@ Route::group([
     Route::crud('part-item/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');
     Route::crud('part-batch', 'PartBatchCrudController');
     Route::crud('equipment', 'EquipmentCrudController');
-    Route::crud('tag', 'TagCrudController');
     Route::crud('storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{parent_id}/storage-location', 'StorageLocationCrudController');
     Route::crud('storage-location/{storage_requireable_id}/storage-requirement', 'StorageRequirementCrudController');

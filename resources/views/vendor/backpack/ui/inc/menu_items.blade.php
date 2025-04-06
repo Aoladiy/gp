@@ -25,7 +25,6 @@
     <x-backpack::menu-dropdown-item title="Партии запчастей" icon="la la-question" :link="backpack_url('part-batch')"/>
 </x-backpack::menu-dropdown>
 <x-backpack::menu-item title="Техника" icon="la la-question" :link="backpack_url('equipment')"/>
-<x-backpack::menu-item title="Теги" icon="la la-question" :link="backpack_url('tag')"/>
 <x-backpack::menu-dropdown title="Склад" icon="la la-puzzle-piece">
     <x-backpack::menu-dropdown-item title="Складские локации" icon="la la-question"
                                     :link="backpack_url('storage-location')"/>
