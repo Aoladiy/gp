@@ -6,6 +6,7 @@ use App\Http\Requests\PartItemRequest;
 use App\Models\Part;
 use App\Models\PartBatch;
 use App\Models\PartItemStatus;
+use App\Models\PartTemplate;
 use App\Models\StorageLocation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -49,6 +50,14 @@ class PartItemCrudController extends CrudController
         }
         $this->crud->addColumn('id');
         $this->crud->addColumn([
+            'name' => 'template_id',
+            'label' => 'Шаблон',
+            'type' => 'select',
+            'entity' => 'part.partTemplate',
+            'attribute' => 'name',
+            'model' => PartTemplate::class,
+        ]);
+        $this->crud->addColumn([
             'name' => 'part_id',
             'label' => 'Деталь',
             'type' => 'select',
@@ -56,7 +65,8 @@ class PartItemCrudController extends CrudController
             'attribute' => 'name',
             'model' => Part::class,
         ]);
-        $this->crud->addColumn('serial_number');
+        $this->crud->addColumn('serial_number')
+            ->setColumnLabel('serial_number', 'Серийный номер');
         $this->crud->addColumn([
             'name' => 'part_batch_id',
             'label' => 'Партия',
@@ -67,7 +77,7 @@ class PartItemCrudController extends CrudController
         ]);
         $this->crud->addColumn([
             'name' => 'storage_location_id',
-            'label' => 'Шаблон',
+            'label' => 'Локация',
             'type' => 'select',
             'entity' => 'storageLocation',
             'attribute' => 'name',
@@ -75,7 +85,7 @@ class PartItemCrudController extends CrudController
         ]);
         $this->crud->addColumn([
             'name' => 'status_id',
-            'label' => 'Шаблон',
+            'label' => 'Статус',
             'type' => 'select',
             'entity' => 'status',
             'attribute' => 'name',
