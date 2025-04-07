@@ -158,6 +158,13 @@ class PartItemCrudController extends CrudController
             'type' => 'textarea',
         ]);
 
+        $this->crud->addField([
+            'name'      => 'image',
+            'label'     => 'Image',
+            'type'      => 'upload',
+            'withFiles' => true
+        ]);
+
         /**
          * Fields can be defined using the fluent syntax:
          * - CRUD::field('price')->type('number');

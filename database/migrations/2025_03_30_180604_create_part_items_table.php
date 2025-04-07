@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('storage_location_id')->nullable();
             $table->unsignedBigInteger('status_id');
             $table->text('condition')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
 
             $table->foreign('part_id')
