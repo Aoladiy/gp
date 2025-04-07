@@ -62,7 +62,7 @@ class PartItemCrudController extends CrudController
             'label' => 'Партия',
             'type' => 'select',
             'entity' => 'partBatch',
-            'attribute' => 'name',
+            'attribute' => 'batch_number',
             'model' => PartBatch::class,
         ]);
         $this->crud->addColumn([
