@@ -46,7 +46,7 @@ class StockMovementCrudController extends CrudController
     {
         $this->crud->addColumn([
             'name' => 'part_item_id',
-            'label' => 'Запчасти',
+            'label' => 'Запчасть',
             'type' => 'select',
             'entity' => 'partItem',
             'attribute' => 'serial_number',
@@ -113,7 +113,7 @@ class StockMovementCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'part_item_id',
-            'label' => 'Запчасти',
+            'label' => 'Запчасть',
             'type' => 'select_from_array',
             'options' => PartItem::query()->pluck('serial_number', 'id'),
             'allows_null' => true,
@@ -153,7 +153,7 @@ class StockMovementCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'moved_at',
-            'label' => 'Дата и время',
+            'label' => 'Дата и время поступления',
             'type' => 'datetime',
             'default' => Carbon::now(),
         ]);
