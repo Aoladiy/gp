@@ -50,7 +50,7 @@ class PartItemCrudController extends CrudController
         }
         $this->crud->addColumn('id');
         $this->crud->addColumn([
-            'name' => 'template_id',
+            'name' => 'fake',
             'label' => 'Шаблон',
             'type' => 'select',
             'entity' => 'part.partTemplate',

@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ *
+ * @property int $from_location_id
+ * @property int $to_location_id
+ * @property int $stock_movement_type_id
+ */
 class StockMovement extends Model
 {
     use CrudTrait;
@@ -18,12 +24,48 @@ class StockMovement extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @var string
+     */
     protected $table = 'stock_movements';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
     // protected $fillable = [];
     // protected $hidden = [];
+
+    /**
+     * @param StockMovement $movement
+     * @return int|null
+     */
+    protected static function resolveTypeId(StockMovement $movement): ?int
+    {
+        $type = match (true) {
+            is_null($movement->from_location_id) && !is_null($movement->to_location_id) => 'Поступление',
+            !is_null($movement->from_location_id) && is_null($movement->to_location_id) => 'Списание',
+            !is_null($movement->from_location_id) && !is_null($movement->to_location_id) => 'Перемещение',
+            default => null,
+        };
+
+        return $type
+            ? StockMovementType::query()->where('name', $type)->value('id')
+            : null;
+    }
+
+    /**
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (StockMovement $movement) {
+            if (!$movement->stock_movement_type_id) {
+                $movement->stock_movement_type_id = self::resolveTypeId($movement);
+            }
+        });
+    }
 
     /*
     |--------------------------------------------------------------------------
