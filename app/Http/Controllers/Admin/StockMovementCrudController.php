@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StockMovementRequest;
+use App\Models\Part;
 use App\Models\PartItem;
 use App\Models\StockMovementType;
 use App\Models\StorageLocation;
@@ -45,8 +46,17 @@ class StockMovementCrudController extends CrudController
     protected function setupListOperation(): void
     {
         $this->crud->addColumn([
-            'name' => 'part_item_id',
+            'name' => 'fake',
             'label' => 'Запчасть',
+            'type' => 'select',
+            'entity' => 'partItem.part',
+            'attribute' => 'name',
+            'model' => Part::class,
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'part_item_id',
+            'label' => 'Экземпляр',
             'type' => 'select',
             'entity' => 'partItem',
             'attribute' => 'serial_number',

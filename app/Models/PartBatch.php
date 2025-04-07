@@ -41,6 +41,14 @@ class PartBatch extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @return bool
+     */
+    public function hasPartItems(): bool
+    {
+        return $this->partItems()->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
