@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\PartTemplateRequest;
 use App\Models\PartTemplate;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Route;
 use function PHPUnit\Framework\isNull;
@@ -12,15 +18,15 @@ use function PHPUnit\Framework\isNull;
 /**
  * Class PartTemplateCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class PartTemplateCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
+    use ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -29,7 +35,7 @@ class PartTemplateCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\PartTemplate::class);
+        CRUD::setModel(PartTemplate::class);
         $this->crud->allowAccess('nested_part_templates');
         $parent_id = Route::current()->parameter('parent_id');
         if ($parent_id) {
@@ -40,7 +46,7 @@ class PartTemplateCrudController extends CrudController
             CRUD::setRoute(config('backpack.base.route_prefix') . '/part-template');
             $this->crud->addClause('where', 'parent_id', null);
         }
-        CRUD::setEntityNameStrings('part template', 'part templates');
+        CRUD::setEntityNameStrings('Шаблон запчасти', 'Шаблоны запчастей');
         /** @var PartTemplate $currentEntry */
         if ($currentEntryId = $this->crud->getCurrentEntryId()) {
             $currentEntry = $this->crud->getModel()::query()->find($currentEntryId);
@@ -51,7 +57,7 @@ class PartTemplateCrudController extends CrudController
                 $parents->prepend([$parent->name => backpack_url('/part-template/' . $parent->id . '/part-template')]);
                 $parent = $parent->parent;
             }
-            $parents->prepend(['Part templates' => backpack_url('part-template')]);
+            $parents->prepend(['Шаблоны запчастей' => backpack_url('part-template')]);
             $parents->prepend([trans('backpack::crud.admin') => backpack_url('dashboard')]);
             $parents->add([trans('backpack::crud.list') => false]);
             $parents = $parents->mapWithKeys(fn($breadcrumb, $key) => $breadcrumb);
@@ -73,7 +79,10 @@ class PartTemplateCrudController extends CrudController
         $this->crud->addButtonFromView('line', 'nested_part_templates', 'nested_part_templates', 'beginning');
 
         $this->crud->addColumn('id');
-        $this->crud->addColumn('name');
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:

@@ -46,9 +46,9 @@ class PartBatchCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\PartBatch::class);
+        CRUD::setModel(PartBatch::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part-batch');
-        CRUD::setEntityNameStrings('part batch', 'part batches');
+        CRUD::setEntityNameStrings('Партия запчастей', 'Партии запчастей');
     }
 
     /**
@@ -68,9 +68,18 @@ class PartBatchCrudController extends CrudController
             'attribute' => 'name',
             'model' => Part::class,
         ]);
-        $this->crud->addColumn('batch_number');
-        $this->crud->addColumn('received_at');
-        $this->crud->addColumn('expiry_date');
+        $this->crud->addColumn([
+            'name' => 'batch_number',
+            'label' => 'Номер партии',
+        ]);
+        $this->crud->addColumn([
+            'name' => 'received_at',
+            'label' => 'Когда получено',
+        ]);
+        $this->crud->addColumn([
+            'name' => 'expiry_date',
+            'label' => 'Годен до',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -121,7 +130,7 @@ class PartBatchCrudController extends CrudController
             'name' => 'quantity',
             'label' => 'Количество',
             'type' => 'number',
-            'attributes' => ['step' => 0.1],
+            'attributes' => ['step' => 1],
         ]);
 
         $this->crud->addField([

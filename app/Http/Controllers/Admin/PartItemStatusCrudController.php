@@ -3,21 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PartItemStatusRequest;
+use App\Models\PartItemStatus;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class PartItemStatusCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class PartItemStatusCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
+    use ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -26,9 +33,9 @@ class PartItemStatusCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\PartItemStatus::class);
+        CRUD::setModel(PartItemStatus::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part-item-status');
-        CRUD::setEntityNameStrings('part item status', 'part item statuses');
+        CRUD::setEntityNameStrings('Статус экземпляра запчасти', 'Статусы экземпляра запчасти');
     }
 
     /**
@@ -40,7 +47,10 @@ class PartItemStatusCrudController extends CrudController
     protected function setupListOperation(): void
     {
         $this->crud->addColumn('id');
-        $this->crud->addColumn('name');
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:

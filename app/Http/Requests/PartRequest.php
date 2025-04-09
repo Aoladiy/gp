@@ -32,6 +32,7 @@ class PartRequest extends FormRequest
                 'string',
                 Rule::unique('parts', 'article_number')->ignore($this->id),
             ],
+            'minimum_stock' => 'gt:0|nullable',
         ];
     }
 

@@ -43,7 +43,7 @@ class EquipmentCrudController extends CrudController
     {
         CRUD::setModel(Equipment::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/equipment');
-        CRUD::setEntityNameStrings('equipment', 'equipment');
+        CRUD::setEntityNameStrings('Техника', 'Техника');
     }
 
     /**
@@ -54,7 +54,10 @@ class EquipmentCrudController extends CrudController
      */
     protected function setupListOperation(): void
     {
-        $this->crud->addColumn('name');
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -125,7 +128,7 @@ class EquipmentCrudController extends CrudController
     protected function handleRequiredPartTemplates(Equipment $entry): void
     {
         $selected = request()->input('requiredPartTemplatesFake', []);
-        $selected = array_filter($selected, fn($item) => !is_null($item));
+        $selected = is_null($selected) ? $selected : array_filter($selected, fn($item) => !is_null($item));
 
         $entry->requiredPartTemplates()->sync($selected);
     }
@@ -137,7 +140,7 @@ class EquipmentCrudController extends CrudController
     protected function handleCompatibleParts(Equipment $entry): void
     {
         $selected = request()->input('compatiblePartsFake', []);
-        $selected = array_filter($selected, fn($item) => !is_null($item));
+        $selected = is_null($selected) ? $selected : array_filter($selected, fn($item) => !is_null($item));
 
         $entry->compatibleParts()->sync($selected);
     }

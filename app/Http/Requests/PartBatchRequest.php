@@ -25,6 +25,8 @@ class PartBatchRequest extends FormRequest
     public function rules()
     {
         return [
+             'part_id' => 'required',
+             'quantity' => 'gt:0',
              'batch_number' => 'required|string',
              'received_at' => 'required',
         ];
