@@ -5,21 +5,27 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\StorageLocationRequest;
 use App\Models\StorageLocation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Class StorageLocationCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class StorageLocationCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
+    use ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,8 +34,9 @@ class StorageLocationCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\StorageLocation::class);
+        CRUD::setModel(StorageLocation::class);
         $this->crud->allowAccess('nested_storage_locations');
+        $this->crud->allowAccess('related_storage_requirements');
         $parent_id = Route::current()->parameter('parent_id');
         if ($parent_id) {
             CRUD::setRoute(config('backpack.base.route_prefix') . '/storage-location/' . $parent_id . '/storage-location');
@@ -39,7 +46,7 @@ class StorageLocationCrudController extends CrudController
             CRUD::setRoute(config('backpack.base.route_prefix') . '/storage-location');
             $this->crud->addClause('where', 'parent_id', null);
         }
-        CRUD::setEntityNameStrings('storage location', 'storage locations');
+        CRUD::setEntityNameStrings('Складская локация', 'Складские локации');
         /** @var StorageLocation $currentEntry */
         if ($currentEntryId = $this->crud->getCurrentEntryId()) {
             $currentEntry = $this->crud->getModel()::query()->find($currentEntryId);
@@ -50,7 +57,7 @@ class StorageLocationCrudController extends CrudController
                 $parents->prepend([$parent->name => backpack_url('/storage-location/' . $parent->id . '/storage-location')]);
                 $parent = $parent->parent;
             }
-            $parents->prepend(['Storage locations' => backpack_url('storage-location')]);
+            $parents->prepend(['Складские локации' => backpack_url('storage-location')]);
             $parents->prepend([trans('backpack::crud.admin') => backpack_url('dashboard')]);
             $parents->add([trans('backpack::crud.list') => false]);
             $parents = $parents->mapWithKeys(fn($breadcrumb, $key) => $breadcrumb);
@@ -69,10 +76,16 @@ class StorageLocationCrudController extends CrudController
         if ($this->crud->hasAccess('nested_storage_locations_back')) {
             $this->crud->addButtonFromView('top', 'nested_storage_locations_back', 'nested_storage_locations_back');
         }
+        if ($this->crud->hasAccess('related_storage_requirements')) {
+            $this->crud->addButtonFromView('line', 'related_storage_requirements', 'related_storage_requirements');
+        }
         $this->crud->addButtonFromView('line', 'nested_storage_locations', 'nested_storage_locations', 'beginning');
 
         $this->crud->addColumn('id');
-        $this->crud->addColumn('name');
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('article_number')->unique();
             $table->text('description')->nullable();
+            $table->unsignedBigInteger('minimum_stock')->nullable();
             $table->unsignedBigInteger('rotation_method_id')->nullable();
             $table->timestamps();
 

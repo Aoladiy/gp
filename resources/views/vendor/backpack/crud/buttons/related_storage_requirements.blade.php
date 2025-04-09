@@ -3,6 +3,7 @@
     $urlStart = match ($entry::class) {
         \App\Models\Part::class => 'admin/part/',
         \App\Models\PartItem::class => 'admin/part-item/',
+        \App\Models\StorageLocation::class => 'admin/storage-location/',
         default => throw new Exception('Unknown storage requireable class: ' . $entry::class),
     };
         if ($entry->hasStorageRequirements()) {

@@ -7,7 +7,11 @@ use App\Models\LightingLevel;
 use App\Models\Part;
 use App\Models\PartItem;
 use App\Models\StorageLocation;
+use App\Models\StorageRequirement;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Exception;
 use Illuminate\Support\Str;
@@ -15,12 +19,12 @@ use Illuminate\Support\Str;
 /**
  * Class StorageRequirementCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class StorageRequirementCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use CreateOperation;
+    use UpdateOperation;
 
     /**
      * @var int
@@ -43,8 +47,8 @@ class StorageRequirementCrudController extends CrudController
      */
     public function setup(): void
     {
-        CRUD::setModel(\App\Models\StorageRequirement::class);
-        CRUD::setEntityNameStrings('storage requirement', 'storage requirements');
+        CRUD::setModel(StorageRequirement::class);
+        CRUD::setEntityNameStrings('Складские условия', 'Складские условия');
         $this->loadParameters();
         $requireableId = $this->getRequireableId();
 

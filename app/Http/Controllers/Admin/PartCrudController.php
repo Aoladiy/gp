@@ -6,20 +6,26 @@ use App\Http\Requests\PartRequest;
 use App\Models\PartTemplate;
 use App\Models\RotationMethod;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class PartCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class PartCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
+    use ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -31,7 +37,7 @@ class PartCrudController extends CrudController
         $this->crud->allowAccess('related_storage_requirements');
         CRUD::setModel(\App\Models\Part::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part');
-        CRUD::setEntityNameStrings('part', 'parts');
+        CRUD::setEntityNameStrings('Запчасть', 'Запчасти');
     }
 
     /**
@@ -54,8 +60,14 @@ class PartCrudController extends CrudController
             'attribute' => 'name',
             'model' => PartTemplate::class,
         ]);
-        $this->crud->addColumn('name');
-        $this->crud->addColumn('article_number');
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+        ]);
+        $this->crud->addColumn([
+            'name' => 'article_number',
+            'label' => 'Артикул',
+        ]);
         $this->crud->addColumn([
             'name' => 'rotation_number_id',
             'label' => 'Метод Ротации',
@@ -63,6 +75,10 @@ class PartCrudController extends CrudController
             'entity' => 'rotationMethod',
             'attribute' => 'name',
             'model' => RotationMethod::class,
+        ]);
+        $this->crud->addColumn([
+            'name' => 'alert',
+            'label' => 'Критический уровень запасов',
         ]);
 
         /**
@@ -99,7 +115,7 @@ class PartCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'article_number',
-            'label' => 'Артикль',
+            'label' => 'Артикул',
             'type' => 'text',
         ]);
 
@@ -107,6 +123,13 @@ class PartCrudController extends CrudController
             'name' => 'description',
             'label' => 'Описание',
             'type' => 'textarea',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'minimum_stock',
+            'label' => 'Минимальный остаток',
+            'type' => 'number',
+            'attributes' => ['step' => 1],
         ]);
 
         $this->crud->addField([

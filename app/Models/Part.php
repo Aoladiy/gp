@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  *
+ * @property ?int $minimum_stock
+ * @property boolean $alert
  */
 class Part extends Model
 {
@@ -113,6 +115,14 @@ class Part extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * @return bool
+     */
+    public function getAlertAttribute(): bool
+    {
+        return $this->partItems()->count() < $this->minimum_stock;
+    }
 
     /*
     |--------------------------------------------------------------------------

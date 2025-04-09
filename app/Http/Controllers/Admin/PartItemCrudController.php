@@ -5,24 +5,31 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\PartItemRequest;
 use App\Models\Part;
 use App\Models\PartBatch;
+use App\Models\PartItem;
 use App\Models\PartItemStatus;
 use App\Models\PartTemplate;
 use App\Models\StorageLocation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class PartItemCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class PartItemCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
+    use ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -32,9 +39,9 @@ class PartItemCrudController extends CrudController
     public function setup(): void
     {
         $this->crud->allowAccess('related_storage_requirements');
-        CRUD::setModel(\App\Models\PartItem::class);
+        CRUD::setModel(PartItem::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part-item');
-        CRUD::setEntityNameStrings('part item', 'part items');
+        CRUD::setEntityNameStrings('Экземпляр запчасти', 'Экземпляры запчасти');
     }
 
     /**
@@ -65,8 +72,10 @@ class PartItemCrudController extends CrudController
             'attribute' => 'name',
             'model' => Part::class,
         ]);
-        $this->crud->addColumn('serial_number')
-            ->setColumnLabel('serial_number', 'Серийный номер');
+        $this->crud->addColumn([
+            'name' => 'serial_number',
+            'label' => 'Серийный номер',
+        ]);
         $this->crud->addColumn([
             'name' => 'part_batch_id',
             'label' => 'Партия',

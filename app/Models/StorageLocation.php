@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
- *
+ * @property int $id
+ * @property string $name
+ * @property ?StorageLocation $parent
  */
 class StorageLocation extends Model
 {
@@ -49,6 +52,14 @@ class StorageLocation extends Model
         return $this->parent()->exists();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasStorageRequirements(): bool
+    {
+        return $this->storageRequirements()->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -85,6 +96,14 @@ class StorageLocation extends Model
     public function toForStockMovements(): HasMany
     {
         return $this->hasMany(StockMovement::class, 'to_location_id');
+    }
+
+    /**
+     * @return MorphOne
+     */
+    public function storageRequirements(): MorphOne
+    {
+        return $this->morphOne(StorageRequirement::class, 'storage_requirements', 'requireable_type', 'requireable_id');
     }
 
     /*
