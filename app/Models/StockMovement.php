@@ -6,9 +6,14 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  *
+ * @property int $part_item_id
+ * @property ?int $user_id
+ * @property Carbon $moved_at
+ * @property string $note
  * @property int $from_location_id
  * @property int $to_location_id
  * @property int $stock_movement_type_id

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\StorageLocationException;
 use App\Http\Requests\PartItemRequest;
 use App\Models\Part;
 use App\Models\PartBatch;
@@ -17,6 +18,10 @@ use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PartItemCrudController
@@ -26,8 +31,12 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class PartItemCrudController extends CrudController
 {
     use ListOperation;
-    use CreateOperation;
-    use UpdateOperation;
+    use CreateOperation {
+        CreateOperation::store as traitStore;
+    }
+    use UpdateOperation {
+        UpdateOperation::update as traitUpdate;
+    }
     use DeleteOperation;
     use ShowOperation;
 
@@ -189,5 +198,39 @@ class PartItemCrudController extends CrudController
     protected function setupUpdateOperation(): void
     {
         $this->setupCreateOperation();
+    }
+
+
+    /**
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function store(): RedirectResponse
+    {
+        try {
+            return DB::transaction(function () {
+                return $this->traitStore();
+            });
+        } catch (StorageLocationException $e) {
+            return back()
+                ->withErrors(['storage_location' => 'Неудовлетворены требования хранения: ' . $e->getMessage()])
+                ->withInput();
+        }
+    }
+
+    /**
+     * @return JsonResponse|RedirectResponse
+     */
+    public function update(): JsonResponse|RedirectResponse
+    {
+        try {
+            return DB::transaction(function () {
+                return $this->traitUpdate();
+            });
+        } catch (StorageLocationException $e) {
+            return back()
+                ->withErrors(['storage_location' => 'Неудовлетворены требования хранения: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 }

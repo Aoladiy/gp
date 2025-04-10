@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->foreign('part_batch_id')
                 ->references('id')
                 ->on('part_batches')
-                ->cascadeOnDelete()
+                ->nullOnDelete()
                 ->cascadeOnUpdate();
 
             $table->foreign('storage_location_id')

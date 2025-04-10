@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\StorageLocationException;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,9 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
- *
- * @property ?int $storage_location_id
  * @property int $id
+ * @property ?int $storage_location_id
+ * @property ?StorageLocation $storageLocation
+ * @property ?StorageRequirement $storageRequirements
+ * @property Part $part
  */
 class PartItem extends Model
 {
@@ -48,6 +51,71 @@ class PartItem extends Model
                         'moved_at' => now(),
                         'note' => 'Автоматически создано при перемещении детали',
                     ]);
+            }
+        });
+        static::saving(function (PartItem $partItem) {
+            if (
+                ($partItem->hasStorageRequirements() || $partItem->part->hasStorageRequirements())
+                && $partItem->storageLocation?->hasStorageRequirements()
+            ) {
+                $requirements = $partItem->storageRequirements ?? $partItem->part->storageRequirements;
+                $conditions = $partItem->storageLocation->storageRequirements;
+
+                if (
+                    $requirements->temperature_min && $conditions->temperature_min
+                    &&
+                    $requirements->temperature_min > $conditions->temperature_min
+                ) {
+                    throw new StorageLocationException('Недопустимо низкая температура в назначаемой складской локации. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->temperature_max && $conditions->temperature_max
+                    &&
+                    $requirements->temperature_max < $conditions->temperature_max
+                ) {
+                    throw new StorageLocationException('Недопустимо высокая температура в назначаемой складской локации. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->humidity_min && $conditions->humidity_min
+                    &&
+                    $requirements->humidity_min > $conditions->humidity_min
+                ) {
+                    throw new StorageLocationException('Недопустимо низкая влажность в назначаемой складской локации. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->humidity_max && $conditions->humidity_max
+                    &&
+                    $requirements->humidity_max < $conditions->humidity_max
+                ) {
+                    throw new StorageLocationException('Недопустимо высокая влажность в назначаемой складской локации. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->lightingLevel?->name && $conditions?->lightingLevel->name
+                    &&
+                    $requirements->lightingLevel->name !== $conditions->lightingLevel->name
+                ) {
+                    throw new StorageLocationException('Уровень освещенности не соответствует требованиям. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->ventilation_level && $conditions->ventilation_level
+                    &&
+                    $requirements->ventilation_level !== $conditions->ventilation_level
+                ) {
+                    throw new StorageLocationException('Уровень вентиляции не соответствует требованиям. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
+
+                if (
+                    $requirements->fire_safety_class && $conditions->fire_safety_class
+                    &&
+                    $requirements->fire_safety_class !== $conditions->fire_safety_class
+                ) {
+                    throw new StorageLocationException('Класс пожарной безопасности не соответствует требованиям. Требования: ' . $requirements . ' Условия: ' . $conditions);
+                }
             }
         });
     }
