@@ -37,7 +37,9 @@ class PartBatchCrudController extends CrudController
     use UpdateOperation {
         UpdateOperation::update as traitUpdate;
     }
-    use DeleteOperation;
+    use DeleteOperation {
+        DeleteOperation::destroy as traitDestroy;
+    }
     use ShowOperation;
 
     /**
@@ -223,6 +225,33 @@ class PartBatchCrudController extends CrudController
                     });
 
                 return $response;
+            });
+        } catch (StorageLocationException $e) {
+            return back()
+                ->withErrors(['storage_location' => 'Неудовлетворены требования хранения: ' . $e->getMessage()])
+                ->withInput();
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function destroy(int $id): string
+    {
+        try {
+            return DB::transaction(function () {
+                $partBatchId = $this->crud->getCurrentEntryId();
+                $statusId = PartItemStatus::query()->where('name', '=', 'Списано')->valueOrFail('id');
+                PartItem::query()
+                    ->where('part_batch_id', '=', $partBatchId)
+                    ->get()
+                    ->each(function (PartItem $item) use ($statusId) {
+                        $item->storage_location_id = null;
+                        $item->status_id = $statusId;
+                        $item->save();
+                    });
+                return $this->traitDestroy($partBatchId);
             });
         } catch (StorageLocationException $e) {
             return back()

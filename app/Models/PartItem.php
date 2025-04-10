@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 /**
  * @property int $id
  * @property ?int $storage_location_id
+ * @property int $status_id
  * @property ?StorageLocation $storageLocation
  * @property ?StorageRequirement $storageRequirements
  * @property Part $part
