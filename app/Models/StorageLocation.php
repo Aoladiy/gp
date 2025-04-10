@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property int $id
  * @property string $name
  * @property ?StorageLocation $parent
+ * @property ?StorageRequirement $storageRequirements
  */
 class StorageLocation extends Model
 {

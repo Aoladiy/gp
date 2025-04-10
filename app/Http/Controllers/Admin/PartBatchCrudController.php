@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\StorageLocationException;
 use App\Http\Requests\PartBatchRequest;
 use App\Models\Part;
 use App\Models\PartBatch;
@@ -167,27 +168,38 @@ class PartBatchCrudController extends CrudController
      */
     public function store(): RedirectResponse
     {
-        DB::beginTransaction();
-        $quantity = request()->input('quantity', 0);
-        $storageLocationId = request()->input('storage_location_id');
-        $status = PartItemStatus::query()->where('name', '=', 'В наличии')->value('id');
-        if (!$status) {
-            throw new Exception('PartItemStatus with name "В наличии" not found');
+        try {
+            return DB::transaction(function () {
+                $quantity = request()->input('quantity', 0);
+                $storageLocationId = request()->input('storage_location_id');
+                $status = PartItemStatus::query()->where('name', '=', 'В наличии')->value('id');
+
+                if (!$status) {
+                    throw new Exception('PartItemStatus with name "В наличии" не найден.');
+                }
+
+                $response = $this->traitStore();
+                $partBatchId = $this->crud->getCurrentEntryId();
+
+                if ($quantity > 0) {
+                    for ($i = 0; $i < $quantity; $i++) {
+                        PartItem::query()
+                            ->create([
+                                'part_id' => request()->input('part_id'),
+                                'part_batch_id' => $partBatchId,
+                                'storage_location_id' => $storageLocationId,
+                                'status_id' => $status,
+                            ]);
+                    }
+                }
+
+                return $response;
+            });
+        } catch (StorageLocationException $e) {
+            return back()
+                ->withErrors(['storage_location' => 'Неудовлетворены требования хранения: ' . $e->getMessage()])
+                ->withInput();
         }
-        $response = $this->traitStore();
-        $partBatchId = $this->crud->getCurrentEntryId();
-        if ($quantity > 0) {
-            for ($i = 1; $i < $quantity; $i++) {
-                PartItem::query()->create([
-                    'part_id' => request()->input('part_id'),
-                    'part_batch_id' => $partBatchId,
-                    'storage_location_id' => $storageLocationId,
-                    'status_id' => $status,
-                ]);
-            }
-        }
-        DB::commit();
-        return $response;
     }
 
     /**
@@ -195,18 +207,27 @@ class PartBatchCrudController extends CrudController
      */
     public function update(): JsonResponse|RedirectResponse
     {
-        DB::beginTransaction();
-        $response = $this->traitUpdate();
-        $partBatchId = $this->crud->getCurrentEntryId();
-        $storageLocationId = request()->input('storage_location_id');
-        PartItem::query()
-            ->where('part_batch_id', '=', $partBatchId)
-            ->get()
-            ->each(function ($item) use ($storageLocationId) {
-                $item->storage_location_id = $storageLocationId;
-                $item->save();
+        try {
+            return DB::transaction(function () {
+                $response = $this->traitUpdate();
+
+                $partBatchId = $this->crud->getCurrentEntryId();
+                $storageLocationId = request()->input('storage_location_id');
+
+                PartItem::query()
+                    ->where('part_batch_id', '=', $partBatchId)
+                    ->get()
+                    ->each(function ($item) use ($storageLocationId) {
+                        $item->storage_location_id = $storageLocationId;
+                        $item->save();
+                    });
+
+                return $response;
             });
-        DB::commit();
-        return $response;
+        } catch (StorageLocationException $e) {
+            return back()
+                ->withErrors(['storage_location' => 'Неудовлетворены требования хранения: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 }

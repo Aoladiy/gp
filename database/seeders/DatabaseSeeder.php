@@ -14,12 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Admin',
             'email' => '1@1',
             'password' => Hash::make('123'),
+        ]);
+
+        $this->call([
+            PartItemStatusSeeder::class,
+            StockMovementTypeSeeder::class,
+            RotationMethodsSeeder::class,
         ]);
     }
 }

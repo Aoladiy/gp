@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  *
  * @property ?int $minimum_stock
  * @property boolean $alert
+ * @property ?StorageRequirement $storageRequirements
  */
 class Part extends Model
 {
