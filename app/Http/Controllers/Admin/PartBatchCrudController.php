@@ -215,12 +215,15 @@ class PartBatchCrudController extends CrudController
 
                 $partBatchId = $this->crud->getCurrentEntryId();
                 $storageLocationId = request()->input('storage_location_id');
+                $inStockStatusId = PartItemStatus::query()->where('name', '=', 'В наличии')->valueOrFail('id');
+                $writtenOffStatusId = PartItemStatus::query()->where('name', '=', 'Списано')->valueOrFail('id');
 
                 PartItem::query()
                     ->where('part_batch_id', '=', $partBatchId)
                     ->get()
-                    ->each(function ($item) use ($storageLocationId) {
+                    ->each(function (PartItem $item) use ($writtenOffStatusId, $inStockStatusId, $storageLocationId) {
                         $item->storage_location_id = $storageLocationId;
+                        $item->status_id = $storageLocationId ? $inStockStatusId : $writtenOffStatusId;
                         $item->save();
                     });
 

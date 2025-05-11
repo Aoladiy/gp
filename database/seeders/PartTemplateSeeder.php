@@ -12,16 +12,22 @@ class PartTemplateSeeder extends Seeder
      */
     public function run(): void
     {
-        $engine = PartTemplate::query()
-            ->updateOrCreate(['name' => 'Двигатель']);
-        $gearbox = PartTemplate::query()
-            ->updateOrCreate([
-                'name' => 'Коробка передач',
-                'parent_id' => $engine->id,
-            ]);
-        PartTemplate::query()
-            ->updateOrCreate(['name' => 'Фильтр масла', 'parent_id' => $engine->id]);
-        PartTemplate::query()
-            ->updateOrCreate(['name' => 'Сцепление', 'parent_id' => $gearbox->id]);
+        $engine = PartTemplate::query()->updateOrCreate(['name' => 'Двигатель']);
+        $gearbox = PartTemplate::query()->updateOrCreate(['name' => 'Коробка передач', 'parent_id' => $engine->id]);
+        $cooling = PartTemplate::query()->updateOrCreate(['name' => 'Система охлаждения', 'parent_id' => $engine->id]);
+
+        $subTemplates = [
+            ['name' => 'Фильтр масла', 'parent_id' => $engine->id],
+            ['name' => 'Стартер', 'parent_id' => $engine->id],
+            ['name' => 'Турбина', 'parent_id' => $engine->id],
+            ['name' => 'Сцепление', 'parent_id' => $gearbox->id],
+            ['name' => 'Редуктор', 'parent_id' => $gearbox->id],
+            ['name' => 'Радиатор', 'parent_id' => $cooling->id],
+            ['name' => 'Термостат', 'parent_id' => $cooling->id],
+        ];
+
+        foreach ($subTemplates as $data) {
+            PartTemplate::query()->updateOrCreate($data);
+        }
     }
 }

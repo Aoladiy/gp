@@ -19,42 +19,31 @@ class PartBatchSeeder extends Seeder
      */
     public function run(): void
     {
-        $part = Part::query()
-            ->where('article_number', 'W9142')->first();
-        $location = StorageLocation::query()
-            ->where('name', 'Главный склад')->first();
-        $statusId = PartItemStatus::query()
-            ->where('name', 'В наличии')->value('id');
+        $statusId = PartItemStatus::query()->where('name', 'В наличии')->value('id');
 
-        if (!$part || !$location || !$statusId) {
-            throw new Exception('Не найдены связанные данные (part, location или status)');
-        }
-
-        // Создаём партию
-        $batch = PartBatch::query()
-            ->updateOrCreate([
-                'batch_number' => 'BATCH-2025-W9142',
+        $parts = Part::query()->get();
+        foreach ($parts as $part) {
+            $batch = PartBatch::query()->updateOrCreate([
+                'batch_number' => 'BATCH-' . $part->article_number,
             ], [
                 'part_id' => $part->id,
-                'received_at' => Carbon::now()->subDays(7),
-                'expiry_date' => Carbon::now()->addYears(1),
+                'received_at' => Carbon::now()->subDays(rand(1, 15)),
+                'expiry_date' => Carbon::now()->addMonths(rand(6, 24)),
             ]);
 
-        // Кол-во создаваемых деталей
-        $quantity = 10;
-
-        for ($i = 1; $i <= $quantity; $i++) {
-            PartItem::query()
-                ->updateOrCreate([
-                    'serial_number' => 'W9142-B25-' . str_pad($i, 3, '0', STR_PAD_LEFT),
+            $quantity = rand(5, 15);
+            for ($i = 1; $i <= $quantity; $i++) {
+                PartItem::query()->updateOrCreate([
+                    'serial_number' => $part->article_number . '-SN-' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 ], [
                     'part_id' => $part->id,
                     'part_batch_id' => $batch->id,
-                    'storage_location_id' => $location->id,
+                    'storage_location_id' => StorageLocation::query()->inRandomOrder()->value('id'),
                     'status_id' => $statusId,
                     'condition' => 'Новое. С партии ' . $batch->batch_number,
                     'image' => null,
                 ]);
+            }
         }
     }
 }
