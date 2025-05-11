@@ -15,8 +15,6 @@ class PartItemStatusSeeder extends Seeder
     {
         $statuses = [
             ['name' => 'В наличии'],
-            ['name' => 'Используется / б/у'],
-            ['name' => 'Зарезервировано'],
             ['name' => 'Списано'],
         ];
 

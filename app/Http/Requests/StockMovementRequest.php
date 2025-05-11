@@ -25,7 +25,13 @@ class StockMovementRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'part_item_id' => ['nullable', 'integer', 'exists:part_items,id'],
+            'stock_movement_type_id' => ['nullable', 'integer', 'exists:stock_movement_types,id'],
+            'from_location_id' => ['nullable', 'integer', 'exists:storage_locations,id'],
+            'to_location_id' => ['nullable', 'integer', 'exists:storage_locations,id'],
+            'moved_at' => ['required', 'date'],
+            'note' => ['nullable', 'string'],
         ];
     }
 

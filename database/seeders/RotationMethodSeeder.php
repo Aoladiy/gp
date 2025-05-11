@@ -6,7 +6,7 @@ use App\Models\RotationMethod;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RotationMethodsSeeder extends Seeder
+class RotationMethodSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -160,7 +160,7 @@ class StockMovementCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'to_location_id',
-            'label' => 'Из локации',
+            'label' => 'В локацию',
             'type' => 'select_from_array',
             'options' => StorageLocation::query()->pluck('name', 'id'),
             'allows_null' => true,

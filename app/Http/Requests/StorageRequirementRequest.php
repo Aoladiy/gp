@@ -25,7 +25,16 @@ class StorageRequirementRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'requireable_id' => ['required', 'integer'],
+            'requireable_type' => ['required', 'string'],
+            'temperature_min' => ['nullable', 'numeric'],
+            'temperature_max' => ['nullable', 'numeric'],
+            'humidity_min' => ['nullable', 'numeric'],
+            'humidity_max' => ['nullable', 'numeric'],
+            'lighting_level_id' => ['nullable', 'integer', 'exists:lighting_levels,id'],
+            'ventilation_level' => ['nullable', 'string'],
+            'fire_safety_class' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
         ];
     }
 
