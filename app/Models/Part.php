@@ -122,7 +122,9 @@ class Part extends Model
      */
     public function getAlertAttribute(): bool
     {
-        return $this->partItems()->count() < $this->minimum_stock;
+        return $this->partItems()
+                ->whereHas('storageLocation')
+                ->count() < $this->minimum_stock;
     }
 
     /*
