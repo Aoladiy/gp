@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\StorageLocation;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,11 +20,20 @@ class DatabaseSeeder extends Seeder
             'email' => '1@1',
             'password' => Hash::make('123'),
         ]);
+        User::factory()->create([
+            'name' => 'testUser',
+            'email' => 'test@test',
+            'password' => Hash::make('123'),
+        ]);
 
         $this->call([
             PartItemStatusSeeder::class,
             StockMovementTypeSeeder::class,
-            RotationMethodsSeeder::class,
+            RotationMethodSeeder::class,
+            StorageLocationSeeder::class,
+            PartTemplateSeeder::class,
+            PartSeeder::class,
+            PartBatchSeeder::class,
         ]);
     }
 }

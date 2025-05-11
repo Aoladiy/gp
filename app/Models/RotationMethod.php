@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ */
 class RotationMethod extends Model
 {
     use CrudTrait;
@@ -18,9 +21,15 @@ class RotationMethod extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @var string
+     */
     protected $table = 'rotation_methods';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
     // protected $fillable = [];
     // protected $hidden = [];
