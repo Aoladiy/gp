@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Operations\ExportToExcelOperation;
 use App\Http\Requests\StockMovementRequest;
 use App\Models\Part;
 use App\Models\PartItem;
@@ -31,6 +32,7 @@ class StockMovementCrudController extends CrudController
     use UpdateOperation;
     use DeleteOperation;
     use ShowOperation;
+    use ExportToExcelOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.

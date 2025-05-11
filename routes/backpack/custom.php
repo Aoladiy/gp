@@ -36,6 +36,7 @@ Route::group([
     Route::crud('lighting-level', 'LightingLevelCrudController');
     Route::crud('part-item-status', 'PartItemStatusCrudController');
     Route::crud('stock-movement-type', 'StockMovementTypeCrudController');
+    Route::crud('report', 'ReportCrudController');
 }); // this should be the absolute last line of this file
 
 /**
