@@ -55,6 +55,22 @@ class PartItem extends Model
             }
         });
         static::saving(function (PartItem $partItem) {
+            if ($partItem->isDirty('storage_location_id')) {
+                if ($partItem->storage_location_id === null) {
+                    $statusId = PartItemStatus::query()
+                        ->where('name', 'Списано')
+                        ->value('id');
+                } else {
+                    $statusId = PartItemStatus::query()
+                        ->where('name', 'В наличии')
+                        ->value('id');
+                }
+
+                if ($statusId) {
+                    $partItem->status_id = $statusId;
+                }
+            }
+
             if (
                 ($partItem->hasStorageRequirements() || $partItem->part->hasStorageRequirements())
                 && $partItem->storageLocation?->hasStorageRequirements()
@@ -63,7 +79,7 @@ class PartItem extends Model
                 $conditions = $partItem->storageLocation->storageRequirements;
 
                 if (
-                    $requirements->temperature_min && $conditions->temperature_min
+                    isset($requirements->temperature_min) && isset($conditions->temperature_min)
                     &&
                     $requirements->temperature_min > $conditions->temperature_min
                 ) {
@@ -71,7 +87,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->temperature_max && $conditions->temperature_max
+                    isset($requirements->temperature_max) && isset($conditions->temperature_max)
                     &&
                     $requirements->temperature_max < $conditions->temperature_max
                 ) {
@@ -79,7 +95,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->humidity_min && $conditions->humidity_min
+                    isset($requirements->humidity_min) && isset($conditions->humidity_min)
                     &&
                     $requirements->humidity_min > $conditions->humidity_min
                 ) {
@@ -87,7 +103,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->humidity_max && $conditions->humidity_max
+                    isset($requirements->humidity_max) && isset($conditions->humidity_max)
                     &&
                     $requirements->humidity_max < $conditions->humidity_max
                 ) {
@@ -95,7 +111,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->lightingLevel?->name && $conditions?->lightingLevel->name
+                    isset($requirements->lightingLevel?->name) && isset($conditions?->lightingLevel->name)
                     &&
                     $requirements->lightingLevel->name !== $conditions->lightingLevel->name
                 ) {
@@ -103,7 +119,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->ventilation_level && $conditions->ventilation_level
+                    isset($requirements->ventilation_level) && isset($conditions->ventilation_level)
                     &&
                     $requirements->ventilation_level !== $conditions->ventilation_level
                 ) {
@@ -111,7 +127,7 @@ class PartItem extends Model
                 }
 
                 if (
-                    $requirements->fire_safety_class && $conditions->fire_safety_class
+                    isset($requirements->fire_safety_class) && isset($conditions->fire_safety_class)
                     &&
                     $requirements->fire_safety_class !== $conditions->fire_safety_class
                 ) {

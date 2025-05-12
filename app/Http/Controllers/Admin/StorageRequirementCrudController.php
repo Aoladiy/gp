@@ -48,7 +48,6 @@ class StorageRequirementCrudController extends CrudController
     public function setup(): void
     {
         CRUD::setModel(StorageRequirement::class);
-        CRUD::setEntityNameStrings('Складские условия', 'Складские условия');
         $this->loadParameters();
         $requireableId = $this->getRequireableId();
 
@@ -59,6 +58,11 @@ class StorageRequirementCrudController extends CrudController
             CRUD::setRoute(config('backpack.base.route_prefix') . '/' . $this->getRoutePath() . '/' . $requireableId . '/storage-requirement');
         } else {
             CRUD::setRoute(config('backpack.base.route_prefix') . '/storage-requirement');
+        }
+        if ($this->getRoutePath() === 'part') {
+            CRUD::setEntityNameStrings('Требования к хранению', 'Требования к хранению');
+        } else {
+            CRUD::setEntityNameStrings('Складские условия', 'Складские условия');
         }
 
         $this->data['breadcrumbs'] = ['Назад' => backpack_url($this->getRoutePath())];
