@@ -27,8 +27,7 @@ class CheckCrudPermission
         $user = backpack_user();
 
         if (!$user || !$user->can($permission)) {
-            Alert::error('Вы не авторизованы для доступа к этому разделу')->flash();
-            return redirect(route( 'backpack.dashboard'));
+            abort(403, 'Вы не авторизованы для доступа к этому разделу.');
         }
 
         return $next($request);
