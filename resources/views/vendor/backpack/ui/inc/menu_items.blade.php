@@ -2,6 +2,7 @@
 {{-- This file is used for menu items by any Backpack v6 theme --}}
 <x-backpack::menu-item title="{{ Str::ucfirst(trans('backpack::base.dashboard')) }}" icon="la la-home"
                        :link="backpack_url('dashboard')"/>
+@can('parts')
 <x-backpack::menu-dropdown title="Запчасти" icon="la la-wrench">
     <x-backpack::menu-dropdown-item title="Шаблоны запчастей" icon="la la-wrench"
                                     :link="backpack_url('part-template')"/>
@@ -10,6 +11,7 @@
                                     :link="backpack_url('part-item')"/>
     <x-backpack::menu-dropdown-item title="Партии запчастей" icon="la la-wrench" :link="backpack_url('part-batch')"/>
 </x-backpack::menu-dropdown>
+@endcan
 <x-backpack::menu-dropdown title="Склад" icon="la la-box">
     <x-backpack::menu-dropdown-item title="Складские локации" icon="la la-box"
                                     :link="backpack_url('storage-location')"/>
