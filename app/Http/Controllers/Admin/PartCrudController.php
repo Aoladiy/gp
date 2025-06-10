@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Requests\PartRequest;
 use App\Models\PartTemplate;
 use App\Models\RotationMethod;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -19,13 +19,18 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class PartCrudController extends CrudController
+class PartCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation;
     use UpdateOperation;
     use DeleteOperation;
     use ShowOperation;
+
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::PARTS;
+    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -34,6 +39,7 @@ class PartCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         $this->crud->allowAccess('related_storage_requirements');
         CRUD::setModel(\App\Models\Part::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part');

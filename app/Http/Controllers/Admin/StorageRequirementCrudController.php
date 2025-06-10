@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Requests\StorageRequirementRequest;
 use App\Models\LightingLevel;
 use App\Models\Part;
 use App\Models\PartItem;
 use App\Models\StorageLocation;
 use App\Models\StorageRequirement;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
@@ -21,10 +21,15 @@ use Illuminate\Support\Str;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class StorageRequirementCrudController extends CrudController
+class StorageRequirementCrudController extends BaseCrudController
 {
     use CreateOperation;
     use UpdateOperation;
+
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::STORAGE;
+    }
 
     /**
      * @var int
@@ -47,6 +52,7 @@ class StorageRequirementCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(StorageRequirement::class);
         $this->loadParameters();
         $requireableId = $this->getRequireableId();

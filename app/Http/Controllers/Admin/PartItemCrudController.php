@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Exceptions\StorageLocationException;
 use App\Http\Requests\PartItemRequest;
 use App\Models\Part;
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\DB;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class PartItemCrudController extends CrudController
+class PartItemCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation {
@@ -40,6 +41,11 @@ class PartItemCrudController extends CrudController
     use DeleteOperation;
     use ShowOperation;
 
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::PARTS;
+    }
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -47,6 +53,7 @@ class PartItemCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         $this->crud->allowAccess('related_storage_requirements');
         CRUD::setModel(PartItem::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part-item');

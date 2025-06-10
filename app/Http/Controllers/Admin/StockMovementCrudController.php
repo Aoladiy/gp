@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Controllers\Admin\Operations\ExportToExcelOperation;
 use App\Http\Requests\StockMovementRequest;
 use App\Models\Part;
@@ -25,7 +26,7 @@ use Illuminate\Support\Carbon;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class StockMovementCrudController extends CrudController
+class StockMovementCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation;
@@ -34,6 +35,11 @@ class StockMovementCrudController extends CrudController
     use ShowOperation;
     use ExportToExcelOperation;
 
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::STORAGE;
+    }
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -41,6 +47,7 @@ class StockMovementCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(StockMovement::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/stock-movement');
         CRUD::setEntityNameStrings('Складское движение', 'Складские движения');

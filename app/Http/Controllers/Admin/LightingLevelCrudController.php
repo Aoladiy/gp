@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Requests\LightingLevelRequest;
 use App\Models\LightingLevel;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -18,13 +18,18 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class LightingLevelCrudController extends CrudController
+class LightingLevelCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation;
     use UpdateOperation;
     use DeleteOperation;
     use ShowOperation;
+
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::ADDITIONAL;
+    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -33,6 +38,7 @@ class LightingLevelCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(LightingLevel::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lighting-level');
         CRUD::setEntityNameStrings('Уровень освещения', 'Уровни освещения');

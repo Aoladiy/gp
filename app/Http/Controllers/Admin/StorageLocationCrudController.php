@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Requests\StorageLocationRequest;
 use App\Models\StorageLocation;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -19,13 +19,18 @@ use Illuminate\Support\Facades\Route;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class StorageLocationCrudController extends CrudController
+class StorageLocationCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation;
     use UpdateOperation;
     use DeleteOperation;
     use ShowOperation;
+
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::STORAGE;
+    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -34,6 +39,7 @@ class StorageLocationCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(StorageLocation::class);
         $this->crud->allowAccess('nested_storage_locations');
         $this->crud->allowAccess('related_storage_requirements');

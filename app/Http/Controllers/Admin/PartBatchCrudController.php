@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Exceptions\StorageLocationException;
 use App\Http\Requests\PartBatchRequest;
 use App\Models\Part;
@@ -9,7 +10,6 @@ use App\Models\PartBatch;
 use App\Models\PartItem;
 use App\Models\PartItemStatus;
 use App\Models\StorageLocation;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\DB;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class PartBatchCrudController extends CrudController
+class PartBatchCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation {
@@ -42,6 +42,11 @@ class PartBatchCrudController extends CrudController
     }
     use ShowOperation;
 
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::PARTS;
+    }
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -49,6 +54,7 @@ class PartBatchCrudController extends CrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(PartBatch::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/part-batch');
         CRUD::setEntityNameStrings('Партия запчастей', 'Партии запчастей');
