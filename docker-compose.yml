@@ -26,7 +26,7 @@ services:
         depends_on:
             - app
             - redis
-        command: php artisan queue:work --verbose --tries=3 --timeout=90
+        entrypoint: [ "php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
         restart: always
 
     nginx:
