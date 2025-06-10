@@ -13,7 +13,7 @@ abstract class BaseCrudController extends CrudController
     public function __construct()
     {
         parent::__construct();
-        if (!backpack_auth()->can(static::getPermissionEnum()->value)) {
+        if (!backpack_user()->can(static::getPermissionEnum()->value)) {
             Alert::error('Вы не авторизованы для этого действия')->flash();
             redirect('dashboard')->send();
         }
