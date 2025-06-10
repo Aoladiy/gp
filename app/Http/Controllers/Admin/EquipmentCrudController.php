@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PermissionsEnum;
 use App\Http\Requests\EquipmentRequest;
 use App\Models\Equipment;
 use App\Models\Part;
 use App\Models\PartTemplate;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -22,7 +22,7 @@ use Illuminate\Http\RedirectResponse;
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class EquipmentCrudController extends CrudController
+class EquipmentCrudController extends BaseCrudController
 {
     use ListOperation;
     use CreateOperation {
@@ -33,6 +33,11 @@ class EquipmentCrudController extends CrudController
     }
     use DeleteOperation;
     use ShowOperation;
+
+    public static function getPermissionEnum(): PermissionsEnum
+    {
+        return PermissionsEnum::EQUIPMENT;
+    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
