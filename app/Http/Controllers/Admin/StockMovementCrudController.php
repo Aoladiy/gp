@@ -65,7 +65,7 @@ class StockMovementCrudController extends CrudController
 
         $this->crud->addColumn([
             'name' => 'part_item_id',
-            'label' => 'Экземпляр',
+            'label' => 'Серийный номер экземпляра',
             'type' => 'select',
             'entity' => 'partItem',
             'attribute' => 'serial_number',
