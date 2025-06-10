@@ -51,7 +51,7 @@ class ReportCrudController extends CrudController
             'name' => 'created_at',
             'label' => 'Создан',
             'type' => 'datetime',
-            'format' => 'd.m.Y H:i:s',
+            'format' => 'DD.MM.YYYY HH:mm:ss',
         ]);
         $this->crud->addButton('line', 'download_report', 'view', 'vendor.backpack.crud.buttons.download_report');
         /**
