@@ -50,6 +50,8 @@ class ReportCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'created_at',
             'label' => 'Создан',
+            'type' => 'datetime',
+            'format' => 'd.m.Y H:i:s',
         ]);
         $this->crud->addButton('line', 'download_report', 'view', 'vendor.backpack.crud.buttons.download_report');
         /**
