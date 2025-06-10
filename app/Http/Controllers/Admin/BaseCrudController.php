@@ -12,7 +12,12 @@ abstract class BaseCrudController extends CrudController
 
     public function setup(): void
     {
-        $this->middleware('crud.permission');
+        $permission = static::getPermissionEnum()->value;
+        $user = backpack_user();
+
+        if (!$user || !$user->can($permission)) {
+            abort(403, 'Вы не авторизованы для доступа к этому разделу.');
+        }
         parent::setup();
     }
 }
