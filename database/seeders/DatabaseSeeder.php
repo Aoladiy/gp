@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory()->create([
             'name' => 'StorageManager',
-            'email' => 'storageManager@storageManager',
+            'email' => '2@2',
             'password' => Hash::make('123'),
         ]);
         User::factory()->create([
             'name' => 'ReportUser',
-            'email' => 'reportUser@reportUser',
+            'email' => '3@3',
             'password' => Hash::make('123'),
         ]);
 

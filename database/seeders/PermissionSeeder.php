@@ -29,5 +29,6 @@ class PermissionSeeder extends Seeder
         $StorageManager->givePermissionTo(Permission::query()->where('name', PermissionsEnum::STORAGE->value)->first());
         $StorageManager->givePermissionTo(Permission::query()->where('name', PermissionsEnum::PARTS->value)->first());
         $StorageManager->givePermissionTo(Permission::query()->where('name', PermissionsEnum::EQUIPMENT->value)->first());
+        $StorageManager->givePermissionTo(Permission::query()->where('name', PermissionsEnum::REPORTS->value)->first());
     }
 }
