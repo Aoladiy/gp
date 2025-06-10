@@ -17,12 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->create([
             'name' => 'Admin',
-            'email' => '1@1',
+            'email' => 'admin@admin',
             'password' => Hash::make('123'),
         ]);
         User::factory()->create([
-            'name' => 'testUser',
-            'email' => 'test@test',
+            'name' => 'StorageManager',
+            'email' => 'storageManager@storageManager',
+            'password' => Hash::make('123'),
+        ]);
+        User::factory()->create([
+            'name' => 'ReportUser',
+            'email' => 'reportUser@reportUser',
             'password' => Hash::make('123'),
         ]);
 
@@ -34,6 +39,7 @@ class DatabaseSeeder extends Seeder
             PartTemplateSeeder::class,
             PartSeeder::class,
             PartBatchSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }
