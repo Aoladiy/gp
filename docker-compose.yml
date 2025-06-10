@@ -20,7 +20,7 @@ services:
         image: nginx:latest
         container_name: nginx
         ports:
-            - "800:80"  # http://localhost:800
+            - "61239:80"  # http://localhost:800
         volumes:
             - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
@@ -53,3 +53,4 @@ services:
 volumes:
     db_data:
     php_socket:
+
