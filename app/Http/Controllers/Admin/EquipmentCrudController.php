@@ -46,6 +46,7 @@ class EquipmentCrudController extends BaseCrudController
      */
     public function setup(): void
     {
+        parent::setup();
         CRUD::setModel(Equipment::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/equipment');
         CRUD::setEntityNameStrings('Техника', 'Техника');
