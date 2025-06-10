@@ -17,7 +17,7 @@ abstract class BaseCrudController extends CrudController
 
         if (!$user || !$user->can($permission)) {
             Alert::error('Вы не авторизованы для этого действия')->flash();
-            redirect('dashboard')->send();
+            redirect(route('backpack.dashboard'))->send();
             exit;
         }
         parent::setup();
