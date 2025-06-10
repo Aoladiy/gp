@@ -10,12 +10,18 @@ abstract class BaseCrudController extends CrudController
 {
     abstract public static function getPermissionEnum(): PermissionsEnum;
 
-    public function __construct()
+    public function setup(): void
     {
-        parent::__construct();
-        if (!backpack_user()->can(static::getPermissionEnum()->value)) {
-            Alert::error('Вы не авторизованы для этого действия')->flash();
-            redirect('dashboard')->send();
-        }
+        $this->middleware(function ($request, $next) {
+            $user = backpack_user();
+
+            if (!$user || !$user->can(static::getPermissionEnum()->value)) {
+                Alert::error('Вы не авторизованы для этого действия')->flash();
+                return redirect('dashboard');
+            }
+
+            return $next($request);
+        });
+        parent::setup();
     }
 }
